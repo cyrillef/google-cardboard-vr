@@ -1,0 +1,9 @@
+{
+	"name": "google-cardboard",
+	"main": "index.js",
+	"dependencies": {
+		"express": "*",
+		"request": "*",
+		"body-parser": "*"
+	}
+}

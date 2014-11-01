@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>Google Cardboard &amp; Autodesk 360 Viewer</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+
+	<link rel="stylesheet" href="https://developer.api.autodesk.com/viewingservice/v1/viewers/style.css" type="text/css">
+	<script src="./viewer3D.js"></script -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="http://underscorejs.org/underscore-min.js"></script>
+	<script src="http://backbonejs.org/backbone-min.js"></script>
+	<link rel="stylesheet" href="./css/default.css" type="text/css">
+
+	<script src="./js/Accelerometer.js"></script>
+	<script src="./js/stereo-device.js"></script>
+	<script src="./js/BarrelDistortionShader.js"></script>
+	
+	<script src="./js/models.js"></script>
+	<script src="./js/stereo-multimodel.js"></script>
+</head>
+	
+<body onload="initialize ();" oncontextmenu="return (false);">
+	<div class="outer">
+		<div id="layer1" class="layer1">
+			<div class="spacer"></div>
+			<center>
+				<div id="control"></div>
+			</center>
+		</div>
+		<div id="layer2" class="layer2">
+			<div id="viewer" style="width:100%; height:100%;"></div>
+		</div>
+	</div>
+			
+	<script>
+				
+	/*			var test =function () {
+					var self =this ;
+					_.extend(self, Backbone.Events);
+					
+					//qq.on ("alert", function(msg) { alert("Triggered " + msg.msg); });
+					
+					self.createQuaternion =function () {
+						//alert ('test') ;
+						self.trigger("alert", { "self":self, "msg": " cc an event"});
+					}
+					
+				} ;
+		
+				var qq =new test () ;
+				qq.on ("alert", function(msg) { alert("Triggered " + msg.msg); });
+		
+		qq.createQuaternion () ;
+	*/	
+		
+		
+/*			qq.on("newMessage", newMessageHandler);
+			function newMessageHandler(e) { alert ('newMessageHandler') ; }
+
+$.event.trigger({
+	type: "newMessage",
+	message: "Hello World!",
+	time: new Date()
+});
+*/		
+					
+				</script>
+</body>
+</html>

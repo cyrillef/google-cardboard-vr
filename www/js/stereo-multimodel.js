@@ -22,12 +22,30 @@ var oViewer =null ;
 var bModelLoaded =false, cleanedModel =false ;
 var upVector ;
 var initZoom =null ;
-var oAccelerometer =null ;
+var oNavigation =null ;
 var FORCE_USE_LOCAL_WORKER_SCRIPT =true ;
 var ENABLE_INLINE_WORKER =false ;
-var RESOURCE_ROOT_CYRILLE ="http://192.168.1.14:8888/" ;
+var RESOURCE_ROOT_CYRILLE ='http://' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/' ;
+//console.log (RESOURCE_ROOT_CYRILLE) ;
 
 function initialize () {
+	if ( annyang ) {
+		// Add our commands to annyang
+		annyang.addCommands (commands) ;
+		/*annyang.addCallback ('error', function () { console.log ('annyang error') ; }) ;
+		annyang.addCallback ('end', function () { console.log ('annyang end') ; }) ;
+		annyang.addCallback ('result', function () { console.log ('annyang result') ; }) ;
+		annyang.addCallback ('resultMatch', function () { console.log ('annyang resultMatch') ; }) ;
+		annyang.addCallback ('resultNoMatch', function () { console.log ('annyang resultNoMatch') ; }) ;
+		annyang.addCallback ('errorNetwork', function () { console.log ('annyang errorNetwork') ; }) ;
+		annyang.addCallback ('errorPermissionBlocked', function () { console.log ('annyang errorPermissionBlocked') ; }) ;
+		annyang.addCallback ('errorPermissionDenied', function () { console.log ('annyang errorPermissionDenied') ; }) ;
+		annyang.addCallback ('start', function () { console.log ('annyang start') ; }) ;
+		// Start listening
+		annyang.debug () ;*/
+		annyang.start ({ autoRestart: true }) ;
+	}
+	
 	//launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6YWRuLTEwLjA3LjIwMTQtMTkuMDEuMzkvU2VhdC5kd2Y=') ;
 	launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a2l0Y2hlbi8xNDAzLmR3Zng=') ;
 	return ;
@@ -154,6 +172,6 @@ function progressListener (e) {
 		// If we have already cleaned and are even further loaded,
 		// remove the progress listeners from the viewer
 		oViewer.removeEventListener ('progress', progressListener) ;
-		oAccelerometer =new viewer3DControls (oViewer) ;
+		oNavigation =new viewer3DControls (oViewer) ;
 	}
 }

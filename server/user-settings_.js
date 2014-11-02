@@ -21,7 +21,9 @@
 // Hard coded consumer and secret keys and base URL.
 // In real world Apps, these values need to secured.
 
-var CONSUMER_KEY ='your consumer key' ;
-var CONSUMER_SECRET ='your consumer secret key' ;
+module.exports ={
+	CONSUMER_KEY: CONSUMER_KEY ='your consumer key',
+	CONSUMER_SECRET: 'your consumer secret key',
 
-var BASE_URL ='https://developer.api.autodesk.com' ;
+	BASE_URL: 'https://developer.api.autodesk.com'
+} ;

@@ -52,7 +52,12 @@ var viewer3DControls =function (viewer) {
 	var boundsSize =_viewer.utilities.getBoundingBox ().size () ;
 	_modelScaleFactor =Math.max (Math.min (Math.min (boundsSize.x, boundsSize.y), boundsSize.z) / 100.0, 1.0) ;
 	
-	_accelerometer.on ("gyroscope", function (accelerometer, event) {
+	_self.getAccelerometer =function () { return (_accelerometer) ; }
+	_self.getViewer =function () { return (_viewer) ; }
+	_self.getBaseDir =function () { return (_baseDir) ; }
+	_self.getMovementSpeed =function () { return (_movementSpeed) ; }
+	
+	/*_accelerometer.on ("gyroscope", function (accelerometer, event) {
 		//var alpha =_accelerometer.getGamma () ? THREE.Math.degToRad (_accelerometer.getAlpha ()) : 0 ;
 		var alpha =THREE.Math.degToRad (_accelerometer.getAlpha ()) ;
 		var beta =THREE.Math.degToRad (_accelerometer.getBeta ()) ;
@@ -94,6 +99,98 @@ var viewer3DControls =function (viewer) {
 		
 		_viewer.navigation.setCameraUpVector (up) ;
 		
+	}) ;*/
+	/*_accelerometer.on ("gyroscope", function (accelerometer, event) {
+		var qs =_self.getOrientQuaternions () ;
+		
+		var pos =_camera.position ;
+		var target =_camera.target ;
+		var vector =_baseDir.clone () ;
+		
+		vector.applyQuaternion (qs.full) ;
+		var newTarget =vector.add (pos) ;
+		
+		_viewer.navigation.setView (pos, newTarget) ;
+		
+		var up =upVector.clone () ;
+		up.applyQuaternion (qs.frontToBack) ;
+		
+		_viewer.navigation.setCameraUpVector (up) ;
+	}) ;*/
+	_accelerometer.on ("gyroscope", function (accelerometer, event) {
+		var qs =_self.getOrientQuaternions () ;
+		
+		var pos =_camera.position ;
+		var target =_camera.target ;
+		var vector =_baseDir.clone () ;
+		
+		vector.applyQuaternion (qs.full) ;
+		var newTarget =vector.add (pos) ;
+		
+		var up =upVector.clone () ;
+		up.applyQuaternion (qs.backToFront) ;
+
+		_self.setView (pos, newTarget, up) ;
 	}) ;
+	
+	_self.setView =function (pos, target, up, alpha) {
+		_viewer.navigation.setView (pos, target) ;
+		if ( up )
+			_viewer.navigation.setCameraUpVector (up) ;
+		if ( alpha )
+			_baseDir =new THREE.Vector3 ().subVectors (_camera.target, _camera.position) ;
+	}
+	
+	_self.getOrientQuaternions =function () {
+		//var alpha =_accelerometer.getGamma () ? THREE.Math.degToRad (_accelerometer.getAlpha ()) : 0 ;
+		var alpha =THREE.Math.degToRad (_accelerometer.getAlpha ()) ;
+		var beta =THREE.Math.degToRad (_accelerometer.getBeta ()) ;
+		var gamma =THREE.Math.degToRad (_accelerometer.getGamma ()) ;
+		var orient =THREE.Math.degToRad (_accelerometer.getScreenOrientation ()) ;
+		
+		//var q =_accelerometer.createQuaternion () (alpha, beta, gamma, orient) ;
+		// alpha is the compass direction the device is facing in degrees. This equates to the left-right
+		// rotation in landscape orientation (with 0-360 degrees)
+		var q1 =new THREE.Quaternion () ;
+		q1.setFromAxisAngle (upVector, alpha) ;
+		
+		// gamma is the front-to-back in degrees (with this screen orientation) with +90/-90 being vertical and
+		// negative numbers being 'downwards' with positive being 'upwards'
+		gamma =-(gamma + (gamma <= 0 ? Math.PI / 2 : -Math.PI / 2)) ;
+		var axis =_baseDir.clone ().normalize () ;
+		axis.cross (upVector) ;
+		var q2 =new THREE.Quaternion () ;
+		q2.setFromAxisAngle (axis, gamma) ;
+
+		var qs =q1.clone () ;
+		qs.multiply (q2) ;
+		return ({ "full": qs, "lefToRight": q1, "backToFront": q2 }) ;
+	}
+	
+	_self.getMoveQuaternions =function () {
+		//var alpha =_accelerometer.getGamma () ? THREE.Math.degToRad (_accelerometer.getAlpha ()) : 0 ;
+		var alpha =THREE.Math.degToRad (_accelerometer.getAlpha ()) ;
+		var beta =THREE.Math.degToRad (_accelerometer.getBeta ()) ;
+		var gamma =THREE.Math.degToRad (_accelerometer.getGamma ()) ;
+		var orient =THREE.Math.degToRad (_accelerometer.getScreenOrientation ()) ;
+		
+		//var q =_accelerometer.createQuaternion () (alpha, beta, gamma, orient) ;
+		// alpha is the compass direction the device is facing in degrees. This equates to the left-right
+		// rotation in landscape orientation (with 0-360 degrees)
+		var q1 =new THREE.Quaternion () ;
+		q1.setFromAxisAngle (upVector, alpha) ;
+		
+		// Z axis is the camera vector, and our orign is _baseDir
+		var zee =new THREE.Vector3 (0, 0, 1) ;
+		var vector =_baseDir.clone () ;
+		vector.y =0 ;
+		vector.normalize () ;
+		var q2 =new THREE.Quaternion () ;
+		q2.setFromUnitVectors  (zee, vector) ;
+
+		var qs =q1.clone () ;
+		qs.multiply (q2) ;
+		return ({ "full": qs, "lefToRight": q1, "alignToBase": q2 }) ;
+	}
 	
 } ;

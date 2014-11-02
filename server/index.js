@@ -23,7 +23,7 @@ var path =require ("path") ;
 var fs =require ("fs") ;
 var requestLib =require ('request') ;
 
-var tools = require('./user-settings');
+var userSettings =require('../server/user-settings') ;
 
 var port =process.argv [2] || 8888 ;
 console.log ('Starting server @ http://localhost:' + port + '/') ;
@@ -34,12 +34,13 @@ http.createServer (function (request, response) {
 	var uri =url.parse (request.url).pathname ;
 	if ( uri == '/api/token' ) {
 		var params ={
-			client_id: CONSUMER_KEY,
-			client_secret: CONSUMER_SECRET,
+			client_id: userSettings.CONSUMER_KEY,
+			client_secret: userSettings.CONSUMER_SECRET,
 			grant_type: 'client_credentials'
 		} ;
+		//console.log ("key --> " + userSettings.CONSUMER_KEY) ;
 
-		requestLib.post (BASE_URL + '/authentication/v1/authenticate',
+		requestLib.post (userSettings.BASE_URL + '/authentication/v1/authenticate',
 			{ form: params },
 			function (error, postResponse, body) {
 				if ( !error && postResponse.statusCode == 200 ) {

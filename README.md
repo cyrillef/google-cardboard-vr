@@ -17,11 +17,9 @@ INSTRUCTIONS - Setting up
   
   5)  Edit the file server/user-settings.js and change the placeholder keys with the keys you received from the Developer Portal:  https://developer.autodesk.com
   
-  6)  Edit the file www/js/stereo-multimodel.js line #28, and change the RESOURCE_ROOT_CYRILLE placeholder value with the address, you'll be using at step 8)
-
-  7)  From a Terminal or node command prompt window, go in the www directory and type the following command:
+  6)  From a Terminal or node command prompt window, go in the www directory and type the following command:
           command: node ../server/index.js
           
-  8)  Test by going to the Chrome browser and type in the following URL:  http://127.0.0.1:8888 (or http://localhost:8888)
-          you should get a response and the viewer tolaunch
+  7)  Test by going to the Chrome browser and type in the following URL:  http://127.0.0.1:8888 (or http://localhost:8888)
+          you should get a response and the viewer to launch
           

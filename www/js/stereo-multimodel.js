@@ -69,13 +69,13 @@ function initialize () {
 }
 
 function launchViewer (docId, upVec, zoomFunc) {
+    // Ask for the page to be fullscreen (can only happen in a function called from a
+    // button-click handler or some other UI event)
+    requestFullscreen () ;
+
 	// Assume the default "world up vector" of the Y-axis (only atypical models such
 	// as Morgan and Front Loader require the Z-axis to be set as up)
 	upVec =typeof upVec !== 'undefined' ? upVec : new THREE.Vector3 (0, 1, 0) ;
-
-	// Ask for the page to be fullscreen (can only happen in a function called from a
-	// button-click handler or some other UI event)
-	//requestFullscreen () ;
 
 	// Bring the layer with the viewers to the front (important so they also receive any UI events)
 	var layer1 =$('#layer1') ;
@@ -174,4 +174,17 @@ function progressListener (e) {
 		oViewer.removeEventListener ('progress', progressListener) ;
 		oNavigation =new viewer3DControls (oViewer) ;
 	}
+}
+
+function requestFullscreen () {
+    // Must be performed from a UI event handler
+    var el =document.documentElement ;
+    if ( el.requestFullScreen )
+        el.requestFullScreen () ;
+    else if ( el.mozRequestFullScreen )
+        e.mozRequestFullScreen () ;
+    else if ( el.webkitRequestFullScreen )
+        el.webkitRequestFullScreen () ;
+    else if ( el.msRequestFullscreen )
+        el.msRequestFullscreen () ;
 }

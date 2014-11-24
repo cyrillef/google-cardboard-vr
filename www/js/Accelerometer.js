@@ -39,14 +39,14 @@ var Accelerometer =function () {
 	_.extend (_self, Backbone.Events) ;
 	
 	var _absolute =null,
-		_alpha =null,
+		_alpha =null, _oldAlpha =0, _fixAlpha =0,
 		_beta =null,
-		_gamma =null,
+		_gamma =null, _oldGamma =0,
 		_acceleration =null,
 		_accelerationIncludingGravity =null,
 		_rotationRate =null,
 		_interval =null,
-		_screenOrientation =0 ;
+		_screenOrientation =window.orientation || 90 ;
 	
 	_self.activate =function () {
 		/*if ( !!window.DeviceMotionEvent ) {
@@ -72,30 +72,46 @@ var Accelerometer =function () {
 			window.addEventListener ("deviceorientation",
 				function (event) {
 					_absolute =event.absolute ; // true - in reference to the Earth's coordinate frame / false - using some arbitrary frame determined by the device
+					if ( _alpha == null )
+						_oldAlpha =event.alpha ;
 					_alpha =event.alpha ; // alpha is the compass direction the device is facing in degrees (around z) [0 / 360]
 					_beta =event.beta ; // beta is the front-to-back tilt in degrees, where front is positive (around x) [-180 / +180]
+					if ( _gamma == null )
+						_oldGamma =event.gamma ;
 					_gamma =event.gamma ; // gamma is the left-to-right tilt in degrees, where right is positive (around y) [-90 - +90]
+				
+					// In landscape mode on Android, the alpha angle switch by 180 degress when the gamma flip from -90->+90 (and vice et versa)
+					if (   (_screenOrientation == 90 || _screenOrientation == -90)
+						&& Math.cos (THREE.Math.degToRad (_alpha - _oldAlpha)) < -0.85
+					) {
+						_fixAlpha +=180 ;
+						_fixAlpha =(_fixAlpha % 360) ;
+					}
+					_oldAlpha =_alpha ;
+					_oldGamma =_gamma ;
+					_alpha +=_fixAlpha ;
+				
 					_self.trigger ("gyroscope", { "_self": _self, "event": event }) ;
 				},
 				false
 			) ;
 		}
 
-		/*window.addEventListener ("orientationchange",
+		window.addEventListener ("orientationchange",
 			function (event) {
 				switch ( window.screen.orientation || window.screen.mozOrientation ) {
-					case 'landscape-primary': _self.screenOrientation =90 ; break ;
-					case 'landscape-secondary': _self.screenOrientation =-90 ; break ;
-					case 'portrait-secondary': _self.screenOrientation =180 ; break ;
-					case 'portrait-primary': _self.screenOrientation =0 ; break ;
-					default: _self.screenOrientation =window.orientation || 0 ; break ;
+					case 'landscape-primary': _screenOrientation =90 ; break ;
+					case 'landscape-secondary': _screenOrientation =-90 ; break ;
+					case 'portrait-secondary': _screenOrientation =180 ; break ;
+					case 'portrait-primary': _screenOrientation =0 ; break ;
+					default: _screenOrientation =window.orientation || 0 ; break ;
 				}
 				_self.trigger ("orientation", { "_self": _self, "event": event }) ;
 			},
 			false
 		) ;
 
-		window.addEventListener ("compassneedscalibration",
+		/*window.addEventListener ("compassneedscalibration",
 			function (event) {
 				//alert ('Your compass needs calibrating!') ;
 				event.preventDefault () ;

@@ -26,12 +26,20 @@ var viewer3DControls =function (viewer) {
 	var _nav =viewer.navigation ;
 	var _camera =_nav.getCamera () ;
 	var _baseDir =new THREE.Vector3 ().subVectors (_camera.target, _camera.position) ;
+	var _basePos =_camera.position.clone () ;
+	var _tempPos =_camera.position.clone () ;
 		
 	var _modelScaleFactor =1.0 ;
 	var _movementSpeed =20.0 ; // for VR make slower (35 for example)
 	var _lookSpeed =0.004 ;
+	
+	var _hudMessageStartShowTime =-1 ;
+	var _hudMessageShowTime =5000 ; // milliseconds to show HUD
+
 //	var _previousFov =_camera.fov ;
+	_nav.setVerticalFov (75, true) ;
 //	var _wasPerspective =_camera.isPerspective ;
+	_nav.toPerspective () ; // Switch to perspective
 	
 	// Google cardboard VR
 //	var _deviceOrientationVR =null ;
@@ -121,16 +129,23 @@ var viewer3DControls =function (viewer) {
 		var qs =_self.getOrientQuaternions () ;
 		
 		var pos =_camera.position ;
-		var target =_camera.target ;
+		//var target =_camera.target ;
 		var vector =_baseDir.clone () ;
 		
 		vector.applyQuaternion (qs.full) ;
 		var newTarget =vector.add (pos) ;
 		
-		var up =upVector.clone () ;
-		up.applyQuaternion (qs.backToFront) ;
+		//var up =upVector.clone () ;
+		//up.applyQuaternion (qs.backToFront) ;
+		
+		/*console.log (  ' pos:' + pos
+			 + ' target:' + newTarget
+			 + ' qs:' + qs.full
+			 + ' up:' + qs.up
+		) ;*/
 
-		_self.setView (pos, newTarget, up) ;
+
+		_self.setView (pos, newTarget, qs.up) ;
 	}) ;
 	
 	_self.setView =function (pos, target, up, alpha) {
@@ -147,6 +162,11 @@ var viewer3DControls =function (viewer) {
 		var beta =THREE.Math.degToRad (_accelerometer.getBeta ()) ;
 		var gamma =THREE.Math.degToRad (_accelerometer.getGamma ()) ;
 		var orient =THREE.Math.degToRad (_accelerometer.getScreenOrientation ()) ;
+		/*console.log (  ' alpha:' + _accelerometer.getAlpha ()
+					 + ' beta:' + _accelerometer.getBeta ()
+					 + ' gamma:' + _accelerometer.getGamma ()
+					 + ' orient:' + _accelerometer.getScreenOrientation ()
+					) ;*/
 		
 		//var q =_accelerometer.createQuaternion () (alpha, beta, gamma, orient) ;
 		// alpha is the compass direction the device is facing in degrees. This equates to the left-right
@@ -158,13 +178,30 @@ var viewer3DControls =function (viewer) {
 		// negative numbers being 'downwards' with positive being 'upwards'
 		gamma =-(gamma + (gamma <= 0 ? Math.PI / 2 : -Math.PI / 2)) ;
 		var axis =_baseDir.clone ().normalize () ;
+		axis.applyQuaternion (q1) ;
 		axis.cross (upVector) ;
 		var q2 =new THREE.Quaternion () ;
 		q2.setFromAxisAngle (axis, gamma) ;
 
+		up =upVector.clone () ;
+		up.applyQuaternion (q2) ;
+		up.normalize () ;
+
 		var qs =q1.clone () ;
 		qs.multiply (q2) ;
-		return ({ "full": qs, "lefToRight": q1, "backToFront": q2 }) ;
+		
+		//return ({ "full": qs, "lefToRight": q1, "backToFront": q2, "up": up }) ;
+		
+		
+		var tt =new THREE.Quaternion () ;
+		var a =new THREE.Euler (0, alpha, gamma, 'XYZ') ;
+		tt.setFromEuler (a) ;
+		
+		up2 =upVector.clone () ;
+		up2.applyEuler (a) ;
+		up2.normalize () ;
+		
+		return ({ "full": tt, "lefToRight": q1, "backToFront": q2, "up": up2 }) ;
 	}
 	
 	_self.getMoveQuaternions =function () {
@@ -192,5 +229,20 @@ var viewer3DControls =function (viewer) {
 		qs.multiply (q2) ;
 		return ({ "full": qs, "lefToRight": q1, "alignToBase": q2 }) ;
 	}
+	
+	_self.showHUD =function (messageSpecs, showDelay) {
+		Autodesk.Viewing.Private.HudMessage.displayMessage (oViewer.container, messageSpecs) ;
+		_hudMessageStartShowTime =new Date ().getTime () ;
+		if ( !showDelay || showDelay <= 0 )
+			showDelay =5000 ;
+		_hudMessageShowTime =showDelay ;
+		window.setTimeout (function () { _self.hideHUD () ; }, showDelay) ;
+	}
+
+	_self.hideHUD =function () {
+		Autodesk.Viewing.Private.HudMessage.dismiss () ; // in case it's still visible
+		_hudMessageStartShowTime =-1 ;
+	}
+
 	
 } ;

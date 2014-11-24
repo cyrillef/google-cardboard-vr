@@ -5,6 +5,8 @@
 	<meta charset="utf-8">
 	<title>Google Cardboard &amp; Autodesk 360 Viewer</title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
 
 	<link rel="stylesheet" href="https://developer.api.autodesk.com/viewingservice/v1/viewers/style.css" type="text/css">
 	<script src="./viewer3D.js"></script -->
@@ -31,7 +33,7 @@
 		<div id="layer1" class="layer1">
 			<div class="spacer"></div>
 			<center>
-				<div id="control"></div>
+				<div id="control"><button id="start" onclick="startHouse ();" class="cmd-btn">Start</button></div>
 			</center>
 		</div>
 		<div id="layer2" class="layer2">

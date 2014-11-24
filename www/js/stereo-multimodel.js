@@ -23,6 +23,7 @@ var bModelLoaded =false, cleanedModel =false ;
 var upVector ;
 var initZoom =null ;
 var oNavigation =null ;
+var biOS =/iPhone|iPad|iPod/i.test (navigator.userAgent) ; // /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 var FORCE_USE_LOCAL_WORKER_SCRIPT =true ;
 var ENABLE_INLINE_WORKER =false ;
 var RESOURCE_ROOT_CYRILLE ='http://' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/' ;
@@ -36,8 +37,17 @@ function initialize () {
 		annyang.addCallback ('end', function () { console.log ('annyang end') ; }) ;
 		annyang.addCallback ('result', function () { console.log ('annyang result') ; }) ;
 		annyang.addCallback ('resultMatch', function () { console.log ('annyang resultMatch') ; }) ;
-		annyang.addCallback ('resultNoMatch', function () { console.log ('annyang resultNoMatch') ; }) ;
-		annyang.addCallback ('errorNetwork', function () { console.log ('annyang errorNetwork') ; }) ;
+		*/
+		annyang.addCallback ('resultNoMatch', function () {
+			//console.log ('annyang resultNoMatch') ;
+			var messageSpecs ={
+				"msgTitleKey": "Voice command error",
+				"messageKey": "Virtual Reality Tool",
+				"messageDefaultValue": "No command match!"
+			} ;
+			oNavigation.showHUD (messageSpecs, 1200) ;
+		}) ;
+		/*annyang.addCallback ('errorNetwork', function () { console.log ('annyang errorNetwork') ; }) ;
 		annyang.addCallback ('errorPermissionBlocked', function () { console.log ('annyang errorPermissionBlocked') ; }) ;
 		annyang.addCallback ('errorPermissionDenied', function () { console.log ('annyang errorPermissionDenied') ; }) ;
 		annyang.addCallback ('start', function () { console.log ('annyang start') ; }) ;
@@ -46,10 +56,10 @@ function initialize () {
 		annyang.start ({ autoRestart: true }) ;
 	}
 	
-	//launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6YWRuLTEwLjA3LjIwMTQtMTkuMDEuMzkvU2VhdC5kd2Y=') ;
-	launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a2l0Y2hlbi8xNDAzLmR3Zng=') ;
-	return ;
+    //createControls () ;
+}
 
+function createControls () {
 	// Populate our initial UI with a set of buttons, one for each function in the Models object
 	var panel =$('#control') ;
 	for ( var fn in Models ) {
@@ -66,6 +76,11 @@ function initialize () {
 		panel.append (button) ;
 		panel.append (document.createTextNode ('\u00a0')) ;
 	}
+}
+
+function startHouse () {
+	//launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6YWRuLTEwLjA3LjIwMTQtMTkuMDEuMzkvU2VhdC5kd2Y=') ;
+	launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a2l0Y2hlbi8xNDAzLmR3Zng=') ;
 }
 
 function launchViewer (docId, upVec, zoomFunc) {
@@ -187,4 +202,6 @@ function requestFullscreen () {
         el.webkitRequestFullScreen () ;
     else if ( el.msRequestFullscreen )
         el.msRequestFullscreen () ;
+	else
+		console.log ('Fullscreen API is not supported.') ;
 }

@@ -29,3 +29,4 @@ node_modules
 
 # Project files
 user-settings.js
+*.bak

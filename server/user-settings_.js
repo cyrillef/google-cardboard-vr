@@ -22,8 +22,8 @@
 // In real world Apps, these values need to secured.
 
 module.exports ={
-	CONSUMER_KEY: CONSUMER_KEY ='your consumer key',
-	CONSUMER_SECRET: 'your consumer secret key',
+	CONSUMER_KEY: 'your_consumer_key',
+	CONSUMER_SECRET: 'your_consumer_secret_key',
 
 	BASE_URL: 'https://developer.api.autodesk.com'
 } ;

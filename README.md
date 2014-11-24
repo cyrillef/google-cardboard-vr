@@ -12,8 +12,8 @@ Dependencies
     * express
     * request
 
-  * The Autodesk Viewer and Data - http://developer.autodesk.com
-  * JQquery version 1.11.0
+  * The Autodesk View and Data API - http://developer.autodesk.com
+  * JQuery version 1.11.0
   * RobertWHurst KeyboardJS (Keyboard controls) - https://github.com/RobertWHurst/KeyboardJS
   * Backbone.js (RESTful JSON interface) - http://backbonejs.org/
     * Underscore.js (Backbone dependency) - http://underscorejs.org

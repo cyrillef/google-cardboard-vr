@@ -4,6 +4,22 @@ google-cardboard-vr
 Research project for a google carboard and Oculus Rift VR experience (presented at AU 2014)
 
 
+Dependencies
+--------------------
+  * Node.js and the following Node.js modules
+    * body-parser
+    * express
+    * request
+
+  * The Autodesk Viewer and Data - http://developer.autodesk.com
+  * JQquery version 1.11.0
+  * RobertWHurst KeyboardJS (Keyboard controls) - https://github.com/RobertWHurst/KeyboardJS
+  * Backbone.js (RESTful JSON interface) - http://backbonejs.org/
+    * Underscore.js (Backbone dependency) - http://underscorejs.org
+  * Three.js (WEBGL) - http://threejs.org
+  * Annyang (Voice recognition) - https://www.talater.com/annyang/
+
+
 INSTRUCTIONS - Setting up
 -------------------
   1)  Install node.js:  http://nodejs.org/download/
@@ -19,10 +35,19 @@ INSTRUCTIONS - Setting up
   
   6)  From a Terminal or node command prompt window, go in the www directory and type the following command:
           command: node ../server/index.js
+          or use the ./go script on OSX and Linux, or  Launch.bat on Windows.
           
   7)  Test by going to the Chrome browser and type in the following URL:  http://127.0.0.1:8888 (or http://localhost:8888)
           you should get a response and the viewer to launch
           
+Testing live
+-------------------------
+
+This is a development site, so it may break from time to time. I'll post a note when it is final and stable.
+
+http://vr.autodesk.io/
+
+
 --------
 
 ## License

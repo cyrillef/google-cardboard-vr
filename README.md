@@ -23,3 +23,15 @@ INSTRUCTIONS - Setting up
   7)  Test by going to the Chrome browser and type in the following URL:  http://127.0.0.1:8888 (or http://localhost:8888)
           you should get a response and the viewer to launch
           
+--------
+
+## License
+
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for full details.
+
+
+## Written by
+
+Autodesk Developer Network <br />
+Cyrille Fauvel - October 2014 <br />
+http://www.autodesk.com/adn <br />

@@ -18,6 +18,8 @@
 //- October 20th, 2014
 //
 
+var HOUSE_MODEL ='dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a2l0Y2hlbi8xNDAzLmR3Zng=' ;
+
 var oViewer =null ;
 var bModelLoaded =false, cleanedModel =false ;
 var upVector ;
@@ -80,7 +82,8 @@ function createControls () {
 
 function startHouse () {
 	//launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6YWRuLTEwLjA3LjIwMTQtMTkuMDEuMzkvU2VhdC5kd2Y=') ;
-	launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a2l0Y2hlbi8xNDAzLmR3Zng=') ;
+	//launchViewer ('dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a2l0Y2hlbi8xNDAzLmR3Zng=') ;
+	launchViewer (HOUSE_MODEL) ;
 }
 
 function launchViewer (docId, upVec, zoomFunc) {

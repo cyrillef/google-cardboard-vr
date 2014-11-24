@@ -1,8 +1,9 @@
 google-cardboard-vr
 ===================
 
-Research project for a google carboard and Oculus Rift VR experience (presented at AU 2014)
-
+Research project for a google carboard and Oculus Rift VR experience (presented at AU 2014)<br />
+SD8417 - An unexpected journey in 3D with the Autodesk 360 Viewer Cloud Service <br/>
+https://events.au.autodesk.com/connect/sessionDetail.ww?SESSION_ID=8417
 
 Dependencies
 --------------------

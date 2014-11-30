@@ -1,9 +1,13 @@
 {
-	"name": "google-cardboard",
+	"name": "google-cardboard-vr",
 	"main": "index.js",
 	"dependencies": {
 		"express": "*",
 		"request": "*",
 		"body-parser": "*"
-	}
+	},
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ADN-DevTech/google-cardboard-vr.git"
+    }
 }

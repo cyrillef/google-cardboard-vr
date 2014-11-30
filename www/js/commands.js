@@ -57,7 +57,7 @@ var commands ={
 		oNavigation.setView (hotSpots ['attic'].position, hotSpots ['attic'].target) ;
 	},
 		
-	'view': function (term) {
+	'view': function () {
 		oNavigation.setView (hotSpots ['view'].position, hotSpots ['view'].target) ;
 	},
 	
@@ -67,6 +67,11 @@ var commands ={
 		} catch ( e ) {
 		}
 	},
+    
+    'start': function () {
+        startHouse () ;
+    },
+    
 /*	'explode': function () {
 		explode (true) ;
 	},

@@ -30,30 +30,18 @@ var viewer3DControls =function (viewer) {
 	var _tempPos =_camera.position.clone () ;
 		
 	var _modelScaleFactor =1.0 ;
-	var _movementSpeed =20.0 ; // for VR make slower (35 for example)
+	var _movementSpeed =1.0 ; // for VR make slower (35 for example)
 	var _lookSpeed =0.004 ;
+	var _toggleVRMotion =false ;
+	var _toggleVRMotionStartTime =-1 ;
+    var _toggleVRMotionTimer ;
 	
 	var _hudMessageStartShowTime =-1 ;
 	var _hudMessageShowTime =5000 ; // milliseconds to show HUD
 
-//	var _previousFov =_camera.fov ;
+	var _previousFov =_camera.fov ;
 	_nav.setVerticalFov (75, true) ;
-//	var _wasPerspective =_camera.isPerspective ;
-	_nav.toPerspective () ; // Switch to perspective
-	
-	// Google cardboard VR
-//	var _deviceOrientationVR =null ;
-//	var _noSleepVR =null ;
-//	var _videoHelper =null ;
-//	var _toggleVRMotion =false ;
-//	var _toggleVRMotionStartTime = -1;
-	// WebVR Device initialization (Oculus, etc)
-//	var _deviceWebAPIVR =null ;
-//	var _deviceSensorVR =null ;
-
-	//var _previousFov =_camera.fov ;
-	_nav.setVerticalFov (75, true) ;
-	//var _wasPerspective =_camera.isPerspective ;
+	var _wasPerspective =_camera.isPerspective ;
 	_nav.toPerspective () ; // Switch to perspective
 		
 	// Calculate a movement scale factor based on the model bounds.
@@ -64,67 +52,35 @@ var viewer3DControls =function (viewer) {
 	_self.getViewer =function () { return (_viewer) ; }
 	_self.getBaseDir =function () { return (_baseDir) ; }
 	_self.getMovementSpeed =function () { return (_movementSpeed) ; }
-	
-	/*_accelerometer.on ("gyroscope", function (accelerometer, event) {
-		//var alpha =_accelerometer.getGamma () ? THREE.Math.degToRad (_accelerometer.getAlpha ()) : 0 ;
-		var alpha =THREE.Math.degToRad (_accelerometer.getAlpha ()) ;
-		var beta =THREE.Math.degToRad (_accelerometer.getBeta ()) ;
-		var gamma =THREE.Math.degToRad (_accelerometer.getGamma ()) ;
-		var orient =THREE.Math.degToRad (_accelerometer.getScreenOrientation ()) ;
-		
-		var pos =_camera.position ;
-		var target =_camera.target ;
-		var vector =_baseDir.clone () ;
-		
-		//var q =_accelerometer.createQuaternion () (alpha, beta, gamma, orient) ;
-		// alpha is the compass direction the device is facing in degrees. This equates to the left-right
-		// rotation in landscape orientation (with 0-360 degrees)
-		//if ( alpha > 90 && alpha < 270 )
-		//	vector.negate () ;
-		var q1 =new THREE.Quaternion () ;
-		q1.setFromAxisAngle (upVector, alpha) ;
-		
-		// gamma is the front-to-back in degrees (with this screen orientation) with +90/-90 being vertical and
-		// negative numbers being 'downwards' with positive being 'upwards'
-		gamma =-(gamma + (gamma <= 0 ? Math.PI / 2 : -Math.PI / 2)) ;
-		var axis =_baseDir.clone ().normalize () ;
-		axis.cross (upVector) ;
-		var q2 =new THREE.Quaternion () ;
-		q2.setFromAxisAngle (axis, gamma) ;
-		
-		//var vector =new THREE.Vector3 ().subVectors (target, pos) ;
-		//vector.applyQuaternion (q) ;
-		//var newTarget =vector.add (pos) ;
-		//var vector =_baseDir.clone () ;
-		vector.applyQuaternion (q2) ;
-		vector.applyQuaternion (q1) ;
-		var newTarget =vector.add (pos) ;
-		
-		_viewer.navigation.setView (pos, newTarget) ;
-		
-		var up =upVector.clone () ;
-		up.applyQuaternion (q2) ;
-		
-		_viewer.navigation.setCameraUpVector (up) ;
-		
-	}) ;*/
-	/*_accelerometer.on ("gyroscope", function (accelerometer, event) {
-		var qs =_self.getOrientQuaternions () ;
-		
-		var pos =_camera.position ;
-		var target =_camera.target ;
-		var vector =_baseDir.clone () ;
-		
-		vector.applyQuaternion (qs.full) ;
-		var newTarget =vector.add (pos) ;
-		
-		_viewer.navigation.setView (pos, newTarget) ;
-		
-		var up =upVector.clone () ;
-		up.applyQuaternion (qs.frontToBack) ;
-		
-		_viewer.navigation.setCameraUpVector (up) ;
-	}) ;*/
+    
+    var _walk0, _walk, _stop ;
+    _self.createSign =function (name) {
+        var img =new THREE.MeshBasicMaterial ({
+            map: THREE.ImageUtils.loadTexture ('css/' + name + '.png'),
+            side: THREE.FrontSide
+        }) ;
+        img.map.needsUpdate =true ;
+        var plane =new THREE.Mesh (new THREE.PlaneGeometry (2, 2), img) ;
+        plane.overdraw =true ;
+        plane.name =name ;
+        plane.rotation.x =THREE.Math.degToRad (-90) ;
+        //_viewer.impl.scene.add (plane) ;
+        var pos =_camera.position ;
+        plane.position.set (pos.x, pos.y - 3, pos.z) ;
+        //_viewer.impl.invalidate (true) ;
+        return (plane) ;
+    }
+    
+    _self.activate =function () {
+        //_walk0 =_self.createSign ('walk0') ;
+        _walk =_self.createSign ('walk') ;
+        _stop =_self.createSign ('stop') ;
+        
+        _viewer.impl.scene.add (_stop) ;
+        _viewer.impl.invalidate (true) ;
+    }
+    _self.activate () ;
+
 	_accelerometer.on ("gyroscope", function (accelerometer, event) {
 		var qs =_self.getOrientQuaternions () ;
 		
@@ -134,17 +90,34 @@ var viewer3DControls =function (viewer) {
 		
 		vector.applyQuaternion (qs.full) ;
 		var newTarget =vector.add (pos) ;
-		
-		//var up =upVector.clone () ;
-		//up.applyQuaternion (qs.backToFront) ;
-		
-		/*console.log (  ' pos:' + pos
-			 + ' target:' + newTarget
-			 + ' qs:' + qs.full
-			 + ' up:' + qs.up
-		) ;*/
+        
+        var gamma =_accelerometer.getGamma () ;
+        if ( gamma <= 0 && gamma >= -10 ) {
+            _toggleVRMotion =!_toggleVRMotion ;
+            if ( _toggleVRMotion == false ) {
+                window.clearInterval (_toggleVRMotionTimer) ;
 
-
+                _viewer.impl.scene.remove (_viewer.impl.scene.getChildByName ('walk')) ;
+                _viewer.impl.scene.add (_stop) ;
+            } else {
+                _viewer.impl.scene.remove (_viewer.impl.scene.getChildByName ('stop')) ;
+                _viewer.impl.scene.add (_walk) ;
+                
+                _toggleVRMotionStartTime =new Date ().getTime () ;
+                _toggleVRMotionTimer =window.setInterval (function () {
+                        var t0 =new Date ().getTime () ;
+                        var diff =(t0 - _toggleVRMotionStartTime) / 1000.0 ;
+                        _toggleVRMotionStartTime =t0 ;
+                    
+                        updateMvt (new THREE.Vector3 (0, 0, diff * _movementSpeed), true) ;
+                    },
+                    250
+                ) ;
+            }
+        }
+        
+        _walk.position.set (pos.x, pos.y - 3, pos.z) ;
+        _stop.position.set (pos.x, pos.y - 3, pos.z) ;
 		_self.setView (pos, newTarget, qs.up) ;
 	}) ;
 	

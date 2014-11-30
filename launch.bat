@@ -1,7 +1,5 @@
 @echo off
-d:
-cd D:\Projects\google-cardboard-vr\www
-rem node ..\server\index.js
+cd %~dp0\www
 
 rem C:\Windows\System32\cmd.exe /k "C:\Program Files\nodejs\nodevars.bat"
 call "C:\Program Files\nodejs\nodevars.bat"

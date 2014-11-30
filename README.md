@@ -53,7 +53,33 @@ This is a development site, so it may break from time to time. I'll post a note 
 
 http://vr.autodesk.io/
 
+  1) If you test on a computer, you can use the keyboard to navigate. All movement are relative to the view direction.
+    * w: move forward
+    * s: move backward
+    * d: step on right
+    * a: step on left
+    * r: go up
+    * f: go down
+  Note that you will need to use the google chome developer tools, phone emulation for gyroscope. Put gamma to 90 degrees when you start.
+  
+  2) When using the phone or a computer, you can also use the voice commands. Commands are:
+    * kitchen
+    * basement
+    * attic
+    * family room
+    * master bedroom
+    * second bedroom
+    * bathroom
+    * upstairs
+    * deck
+    * dressing
+    * carport
+    * under deck
+    * view
 
+  3) Last, on the phone, if you look at your feet, you can toggle on and off the walking mode, and navigate inside the house. Again, you are walking in the camera direction.
+  
+  
 --------
 
 ## License

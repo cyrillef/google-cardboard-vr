@@ -52,7 +52,7 @@ html, body {
     right: 0;
     width: 100%;
     height: 100%;
-    background-image: url("go.jpg");
+    background-image: url("/img/go.jpg");
     background-repeat: no-repeat;
     background-size: contain;
 }

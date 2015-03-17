@@ -1,4 +1,9 @@
-// (C) Copyright 2014 by Autodesk, Inc.
+//
+// Copyright (c) Autodesk, Inc. All rights reserved 
+//
+// Node.js server workflow 
+// by Cyrille Fauvel - Autodesk Developer Network (ADN)
+// January 2015
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted, 
@@ -12,18 +17,19 @@
 // MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.  AUTODESK, INC. 
 // DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
 // UNINTERRUPTED OR ERROR FREE.
-
-//- Written by Cyrille Fauvel, Autodesk Developer Network (ADN)
-//- http://www.autodesk.com/joinadn
-//- October 20th, 2014
 //
+var express =require ('express') ;
+var request =require ('request') ;
+var lmv =require ('./lmv') ;
 
-// Hard coded consumer and secret keys and base URL.
-// In real world Apps, these values need to secured.
+var seconds =1700 ; // Service returns 1799 seconds bearer token
+setInterval (lmv.Lmv.refreshToken, seconds * 1000) ;
+lmv.Lmv.refreshToken () ;
 
-module.exports ={
-	CONSUMER_KEY: 'your_consumer_key',
-	CONSUMER_SECRET: 'your_consumer_secret_key',
+var router =express.Router () ;
+router.get ('/token', function (req, res) {
+	res.setHeader ('Content-Type', 'text/plain') ;
+	res.send (lmv.Lmv.getToken ()) ;
+}) ;
 
-	BASE_URL: 'https://developer.api.autodesk.com'
-} ;
+module.exports =router ;

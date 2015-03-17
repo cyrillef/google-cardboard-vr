@@ -17,71 +17,25 @@
 //- http://www.autodesk.com/joinadn
 //- October 20th, 2014
 //
-var http =require ("http") ;
-var url =require ("url") ;
-var path =require ("path") ;
-var fs =require ("fs") ;
-var requestLib =require ('request') ;
 
-var userSettings =require('../server/user-settings') ;
+// To avoid the EXDEV rename error, see http://stackoverflow.com/q/21071303/76173
+//process.env.TMPDIR ='tmp' ;
+//process.env ['NODE_TLS_REJECT_UNAUTHORIZED'] ='0' ; // Ignore 'UNABLE_TO_VERIFY_LEAF_SIGNATURE' authorization error
+console.log ('Working directory: ' + __dirname) ;
 
-var port =process.argv [2] || 8888 ;
-console.log ('Starting server @ http://localhost:' + port + '/') ;
-//console.log (__dirname) ;
+var express =require ('express') ;
+var request =require ('request') ;
+var bodyParser =require ('body-parser') ;
+var fs =require ('fs') ;
 
-http.createServer (function (request, response) {
+var lmvToken =require ('./lmv-token') ;
 
-	var uri =url.parse (request.url).pathname ;
-	if ( uri == '/api/token' ) {
-		var params ={
-			client_id: userSettings.CONSUMER_KEY,
-			client_secret: userSettings.CONSUMER_SECRET,
-			grant_type: 'client_credentials'
-		} ;
-		//console.log ("key --> " + userSettings.CONSUMER_KEY) ;
+var app =express () ;
+app.use (bodyParser.json ()) ;
+app.use (express.static (__dirname + '/../www')) ;
+app.use ('/api', lmvToken) ;
 
-		requestLib.post (userSettings.BASE_URL + '/authentication/v1/authenticate',
-			{ form: params },
-			function (error, postResponse, body) {
-				if ( !error && postResponse.statusCode == 200 ) {
-					var authResponse =JSON.parse (body) ;
-					response.write (authResponse.access_token) ;
-					response.end () ;
-					console.log ('Token:' + authResponse.access_token) ;
-				}
-			}
-		) ;
-		return ;
-	}
-	
-	var filename =path.join (process.cwd (), uri) ;
-	console.log (filename) ;
-
-	fs.exists (filename, function (exists) {
-		if ( !exists ) {
-			response.writeHead (404, { "Content-Type": "text/plain" }) ;
-			response.write ("404 Not Found\n") ;
-			response.end () ;
-			return ;
-		}
-
-		if ( fs.statSync (filename).isDirectory () )
-			filename +='/index.html' ;
-
-		fs.readFile (filename, "binary", function (err, file) {
-			if ( err ) {
-				response.writeHead (500, { "Content-Type": "text/plain" }) ;
-				response.write (err + "\n") ;
-				response.end () ;
-				return ;
-			}
-
-			response.writeHead (200/*, { 'Content-Type': 'text/json', 'Access-Control-Allow-Origin': '*', 'X-Powered-By':'nodejs' }*/) ;
-			response.write (file, "binary") ;
-			response.end () ;
-		}) ;
-	}) ;
-	
-}).listen (parseInt (port, 10)) ;
-
-console.log ("Server running @ http://localhost:" + port + "/\n\tCTRL + C to shutdown") ;
+app.set ('port', process.env.PORT || 80) ;
+var server =app.listen (app.get ('port'), function () {
+	console.log ('Server listening on port ' + server.address ().port) ;
+}) ;

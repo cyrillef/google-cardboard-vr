@@ -131,8 +131,13 @@ VRController.prototype.setView =function (pos, target, up, resetBaseDir) {
 		this._baseDir =new THREE.Vector3 ().subVectors (this._camera.target, this._camera.position) ;
 } ;
 
+VRController.prototype.toggleAutoMove =function () {
+	this._viewer.loadedExtensions ['Autodesk.VR'].tool._toggleAutoMove_ () ;
+} ;
+
 VRController.prototype.showHUD =function (messageSpecs, showDelay) {
-	Autodesk.Viewing.Private.HudMessage.displayMessage (this.viewer.container, messageSpecs) ;
+	var _self =this ;
+	Autodesk.Viewing.Private.HudMessage.displayMessage (this._viewer.container, messageSpecs) ;
 	this._hudMessageStartShowTime =new Date ().getTime () ;
 	if ( !showDelay || showDelay <= 0 )
 		showDelay =5000 ;
@@ -157,6 +162,7 @@ VRController.launchViewer =function (urn, upVec) {
 	// Bring the layer with the viewers to the front (important so they also receive any UI events)
 	$('#layer1').css ('zIndex', 1) ;
 	$('#layer2').css ('zIndex', 2) ;
+	$('#help').css ('visibility', 'hidden') ;
 
 	var config3d ={} ;
 	config3d.screenModeDelegate =Autodesk.Viewing.ApplicationScreenModeDelegate ;

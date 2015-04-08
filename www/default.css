@@ -25,16 +25,19 @@ html, body {
     padding: 0;
     margin: -1px;
 }
+table.dblzero ul {
+	margin: 0px;
+}
 .cmd-btn {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 48px;
+    font-size: 40px;
     border: 3px solid #555;
     border-radius: 5px;
     color: #555;
     background: #ffffff;
     text-transform: uppercase;
     text-align: center;
-    padding: 15px;
+    padding: 10px;
     width: 300px;
 }
 .cmd-btn:hover {
@@ -42,8 +45,50 @@ html, body {
     color: #fff;
     background-color: #555;
 }
+.help {
+	z-index: 3;
+	color: white;
+	margin: 3px;
+	position: absolute;
+	display: inline-block;
+	float: none;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url("/img/go.jpg");
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+.help-text-bck {
+	z-index: 4;
+	color: white;
+	margin: 0px;
+	position: absolute;
+	display: inline-block;
+	float: none;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	background: gray;
+	opacity: .8;
+}
+.help-text {
+	z-index: 5;
+	color: white;
+	padding: 7px;
+	position: absolute;
+	display: inline-block;
+	float: none;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+}
 .layer1 {
-    z-index: 2;
+    z-index: 6;
     margin: 3px;
     position: absolute;
     display: inline-block;
@@ -52,9 +97,7 @@ html, body {
     right: 0;
     width: 100%;
     height: 100%;
-    background-image: url("/img/go.jpg");
-    background-repeat: no-repeat;
-    background-size: contain;
+    /*background: transparent;*/
 }
 .layer2 {
     z-index: 1;
@@ -66,7 +109,7 @@ html, body {
     height: 100%;
 }
 .spacer {
-    height: 10%;
+    height: 76%;
 }
 .outer {
     position: relative;
@@ -74,4 +117,12 @@ html, body {
     width: 100%;
     height:100%;
     display: table;
+}
+.dblzero {
+	padding: 0px;
+	margin: 0px;
+}
+#viewer {
+	width: 100%;
+	height: 100%;
 }

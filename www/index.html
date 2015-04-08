@@ -14,7 +14,7 @@
 
     <!-- Autodesk View & Data API -->
     <link type="text/css" rel="stylesheet" href="https://developer.api.autodesk.com/viewingservice/v1/viewers/style.css" />
-    <script src="https://developer.api.autodesk.com/viewingservice/v1/viewers/viewer3D.min.js"></script>
+    <script src="viewer3D.min.js"></script>
 
     <!-- link type="text/css" rel="stylesheet" href="./extensions/cardboard/cardboard.css" / -->
 	<link type="text/css" rel="stylesheet" href="./VR.css" />
@@ -35,13 +35,61 @@
 	
 <body>
 	<div class="outer">
-		<div id="layer1" class="layer1">
-			<div class="spacer"></div>
-			<div id="control" style="text-align: center;"><button id="start" class="cmd-btn">Start</button></div>
-		</div>
+		<div id="help" class="help">
+            <div id="help-text-bck" class="help-text-bck"></div>
+            <div id="help-text" class="help-text">
+                <p class="dblzero">Get a WEBGL compatible phone, a Google cardboard,</p>
+
+                <table class="dblzero">
+                    <tr><td colspan="3">Voice commands to navigate into the house:</td></tr>
+                    <tr><td>
+                    <ul>
+                        <li>kitchen</li>
+                        <li>carport</li>
+                        <li>family room</li>
+                        <li>master bedroom</li>
+                    </ul>
+                    </td>
+                    <td>
+                    <ul>
+                        <li>dressing</li>
+                        <li>second bedroom</li>
+                        <li>bathroom</li>
+                        <li>deck</li>
+                    </ul>
+                    </td>
+                    <td>
+                    <ul>
+                        <li>under deck</li>
+                        <li>basement</li>
+                        <li>upstairs</li>
+                        <li>attic</li>
+                        <li>view</li>
+                    </ul>
+                    </td></tr>
+                    <tr><td colspan="3">or 'show me *term'  *term being one of the above</td></tr>
+                </table>
+
+                <p>Voice commands to control motion: start and stop<br />
+                Toggle motion by watching your feet briefly.<br />
+                To accelerate motion speed, watch your feet a bit longer than needed to toggle motion<br />
+                </p>
+                <p>Press the START button, and place your phone into the Google cardboard.</p>
+
+            </div>
+        </div>
+
+        <div id="layer1" class="layer1">
+            <div class="spacer"></div>
+            <div id="control" style="text-align: center;">
+                <button id="start" class="cmd-btn">Start</button>
+            </div>
+        </div>
+
 		<div id="layer2" class="layer2">
-			<div id="viewer" style="width: 100%; height :100%;"></div>
+			<div id="viewer"></div>
 		</div>
+
 	</div>
 </body>
 </html>

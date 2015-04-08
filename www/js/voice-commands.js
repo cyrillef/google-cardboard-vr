@@ -34,7 +34,12 @@ var commands ={
 	'attic': function () { commands.navigateTo ('attic') ; },
 	'view': function () { commands.navigateTo ('view') ; },
 	'show me *term': function (term) { commands.navigateTo (term) ; },
-	'start': function () { oVR.startHouse () ; }
+
+	'start': function () { oVR.toggleAutoMove() ; },
+	'stop': function () { oVR.toggleAutoMove() ; },
+
+	'demo': function () { oVR.startHouse () ; }
+
 } ;
 
 commands.navigateTo =function (term) {

@@ -684,6 +684,9 @@ Autodesk.Viewing.Extensions.VR.VRTool =function (viewer, vrExtension) {
 
     /////////////////////////////////////////////////////////////////////////
     // Auto movement support
+	this._toggleAutoMove_ = function() {
+		toggleAutoMove() ;
+	}
 
     var toggleAutoMove = function()
     {

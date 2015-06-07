@@ -89,7 +89,7 @@ util.inherits (Lmv, events.EventEmitter) ;
 	}
 	unirest.post (creds.AuthenticateUrl)
 		.header ('Accept', 'application/json')
-		.type ('application/x-www-form-urlencoded')
+		//.type ('application/x-www-form-urlencoded')
 		.send (params)
 		.end (function (response) {
 			try {

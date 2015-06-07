@@ -18,7 +18,7 @@
 //- October 20th, 2014
 //
 
-var HOUSE_MODEL ='dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a2l0Y2hlbi8xNDAzLmR3Zng=' ;
+var HOUSE_MODEL ='dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDE1LTA2LTA1LTAyLTQ5LTMyLXZqeDljcGNseTA0MDVkbnJxejV1b3VwZmVzcmovMTQwMy5kd2Z4' ;
 var oVR =null ;
 var biOS =/iPhone|iPad|iPod/i.test (navigator.userAgent) ; // /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 var bMobileDevice =/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test (navigator.userAgent.toLowerCase ()) ;
@@ -169,8 +169,11 @@ VRController.launchViewer =function (urn, upVec) {
 	config3d.extensions =[ 'Autodesk.Viewing.Oculus' ] ;
 
 	oVR =new VRController (
-		new Autodesk.Viewing.Viewer3D ($('#viewer') [0], config3d),
-		//new Autodesk.Viewing.Private.GuiViewer3D ($('#viewer') [0], config3d),
+
+		//?? Autodesk.VR extension uses viewer.getToolbar, which is a function of GuiViewer3D
+
+		//new Autodesk.Viewing.Viewer3D ($('#viewer') [0], config3d),
+		new Autodesk.Viewing.Private.GuiViewer3D ($('#viewer') [0], config3d),
 		urn,
 		new THREE.Vector3 ().copy (upVec),
 		config3d

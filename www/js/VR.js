@@ -16,7 +16,7 @@ Autodesk.Viewing.Extensions.VR.VRExtension.prototype.constructor =Autodesk.Viewi
 Autodesk.Viewing.Extensions.VR.VRExtension.prototype.load =function () {
 	var self =this ;
 	var viewer =this.viewer ;
-	var toolbar =viewer.getToolbar (true) ;
+	var toolbar =viewer.getToolbar ? viewer.getToolbar (true) : undefined;
 	var avu =Autodesk.Viewing.UI ;
 
 	// Register tool

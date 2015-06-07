@@ -34,11 +34,11 @@ Once you got your urn key on the translated file, use it at step 6)
   3)  Install project node.js dependencies, start a node.js command prompt, go to the project directory
           command:  npm install
        
-  4)  Copy the server/user-settings-.js into server/credentials.js
+  4)  Copy the server/credentials_.js into server/credentials.js
   
   5)  Edit the file server/credentials.js and change the placeholder keys with the keys you received from the Developer Portal:  https://developer.autodesk.com
 
-  6)  Edit the file www/js/stereo-multimodel.js and edit line #21 by replacing the MODEL_HOUSE urn by your urn
+  6)  Edit the file www/js/vr-start.js and edit line #21 by replacing the MODEL_HOUSE urn by your urn
   
   7)  From a Terminal or node command prompt window, go in the www directory and type the following command:
           command: node ../server/index.js

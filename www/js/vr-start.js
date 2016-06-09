@@ -67,7 +67,7 @@ var VRController =function (viewer, model, upVector, config3d) {
 VRController.prototype.initialize =function (config3d) {
 	var _self =this ;
 	// Get our access token from the internal web-service API
-	$.get ('http://' + window.location.host + '/api/token',
+	$.get (window.location.protocol + '//' + window.location.host + '/api/token',
 		function (accessToken) {
 			// Specify our options, including the provided document ID
 			var options ={
